@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11805575717",
+    "project_id": "zekrayaty-app",
+    "storage_bucket": "zekrayaty-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11805575717:android:e194e3acad0082a850cdcc",
+        "android_client_info": {
+          "package_name": "com.example.zekrayaty_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnf_spD4EB_0he269Uc8dionQCV5qoE_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
