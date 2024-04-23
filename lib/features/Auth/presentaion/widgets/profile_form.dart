@@ -14,7 +14,6 @@ import 'package:zekrayaty_app/core/utility/helpers/navigation.dart';
 import 'package:zekrayaty_app/core/utility/validations/percise_validation.dart';
 import 'package:zekrayaty_app/features/Auth/data/user_model.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/bloc/auth_bloc.dart';
-import 'package:zekrayaty_app/features/Home/presentation/screens/home_screen.dart';
 import 'package:zekrayaty_app/theme.dart';
 
 class ProfileForm extends StatefulWidget {
@@ -334,7 +333,7 @@ class _ProfileFormState extends State<ProfileForm> {
     AuthBloc.get(context).add(UpdateProfileEvent(newUser));
     // PlacesBloc.get(context).add(GetVenuesEvent([]));
     // PlacesBloc.get(context).add(GetEventsAndActivitiesPlacesEvent([]));
-    Navigation.emptyNavigator(HomeScreen.routeName, context, null);
+    // Navigation.emptyNavigator(HomeScreen.routeName, context, null);
   }
 
   // Function to show date picker

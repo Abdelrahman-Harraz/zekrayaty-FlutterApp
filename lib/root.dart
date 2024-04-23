@@ -8,7 +8,6 @@ import 'package:zekrayaty_app/core/utility/helpers/navigation.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/bloc/auth_bloc.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/auth_screen.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/profile_screen.dart';
-import 'package:zekrayaty_app/features/Home/presentation/screens/home_screen.dart';
 
 // Root widget that determines the initial screen based on app status
 class Root extends StatelessWidget {
@@ -27,7 +26,7 @@ class Root extends StatelessWidget {
           // HomeBloc.get(context).add(SetHomeTabEvent(HomeTab.home));
           // PlacesBloc.get(context).add(GetVenuesEvent([]));
           // PlacesBloc.get(context).add(GetEventsAndActivitiesPlacesEvent([]));
-          Navigation.emptyNavigator(HomeScreen.routeName, context, null);
+          // Navigation.emptyNavigator(HomeScreen.routeName, context, null);
         } else if (state.status == AppStatus.loggedOut) {
           // If logged out, navigate to the onboarding screen
           Navigator.pushReplacementNamed(context, AuthScreen.routeName);

@@ -17,7 +17,6 @@ import 'package:zekrayaty_app/features/Auth/presentaion/bloc/auth_bloc.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/forgot_password_screen.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/profile_screen.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/widgets/auth_background_widget.dart';
-import 'package:zekrayaty_app/features/Home/presentation/screens/home_screen.dart';
 import 'package:zekrayaty_app/theme.dart';
 
 // Class representing the authentication screen
@@ -71,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
             // HomeBloc.get(context).add(SetHomeTabEvent(HomeTab.home));
             // PlacesBloc.get(context).add(GetVenuesEvent([]));
             // PlacesBloc.get(context).add(GetEventsAndActivitiesPlacesEvent([]));
-            Navigation.emptyNavigator(HomeScreen.routeName, context, null);
+            // Navigation.emptyNavigator(HomeScreen.routeName, context, null);
             AuthBloc.get(context).add(ResetAuthSeceenEvent());
           } else if (state.loginStatus == RequestStatus.loading ||
               state.registerStatus == RequestStatus.loading) {

@@ -3,7 +3,6 @@ import 'package:page_transition/page_transition.dart';
 import 'package:zekrayaty_app/features/Auth/data/user_model.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/auth_screen.dart';
 import 'package:zekrayaty_app/features/Auth/presentaion/screens/profile_screen.dart';
-import 'package:zekrayaty_app/features/Home/presentation/screens/home_screen.dart';
 
 // Class responsible for managing the app's navigation and page transitions
 class AppRouter {
@@ -12,21 +11,21 @@ class AppRouter {
 // Method to generate and return a PageTransition based on route settings
   static PageTransition? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case '/':
-        return PageTransition(
-          child: HomeScreen(),
-          type: PageTransitionType.size,
-          alignment: Alignment.center,
-          duration: animationDuration,
-          settings: settings,
-        );
-      case '/HomeScreen':
-        return PageTransition(
-          child: const HomeScreen(),
-          type: PageTransitionType.rightToLeft,
-          duration: animationDuration,
-          settings: settings,
-        );
+      // case '/':
+      //   return PageTransition(
+      //     child: HomeScreen(),
+      //     type: PageTransitionType.size,
+      //     alignment: Alignment.center,
+      //     duration: animationDuration,
+      //     settings: settings,
+      //   );
+      // case '/HomeScreen':
+      //   return PageTransition(
+      //     child: const HomeScreen(),
+      //     type: PageTransitionType.rightToLeft,
+      //     duration: animationDuration,
+      //     settings: settings,
+      //   );
       case '/AuthScreen':
         return PageTransition(
           child: const AuthScreen(),
