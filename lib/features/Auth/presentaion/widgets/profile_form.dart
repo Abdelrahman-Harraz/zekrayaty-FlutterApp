@@ -1,11 +1,13 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-
-import 'package:sizer/sizer.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:sizer/sizer.dart';
+
 import 'package:zekrayaty_app/common/presentation/widgets/custom_Button.dart';
 import 'package:zekrayaty_app/common/presentation/widgets/field_decoration.dart';
 import 'package:zekrayaty_app/core/constants/constants.dart';
@@ -13,12 +15,17 @@ import 'package:zekrayaty_app/core/error_handling/failure_ui_handling.dart';
 import 'package:zekrayaty_app/core/utility/helpers/navigation.dart';
 import 'package:zekrayaty_app/core/utility/validations/percise_validation.dart';
 import 'package:zekrayaty_app/features/Auth/data/user_model.dart';
-import 'package:zekrayaty_app/features/Auth/presentaion/bloc/auth_bloc.dart';
+import 'package:zekrayaty_app/features/Auth/presentaion/screens/profile_screen.dart';
 import 'package:zekrayaty_app/theme.dart';
 
 class ProfileForm extends StatefulWidget {
   UserModel userModel;
-  ProfileForm({super.key, required this.userModel});
+  final PreciseValidate preciseValidate;
+  ProfileForm({
+    Key? key,
+    required this.userModel,
+    required this.preciseValidate,
+  }) : super(key: key);
   @override
   State<ProfileForm> createState() => _ProfileFormState();
 }
@@ -75,48 +82,58 @@ class _ProfileFormState extends State<ProfileForm> {
           // Fullname Field
           Padding(
             padding: const EdgeInsets.all(paddingAll),
-            child: TextFormField(
-                key: const ValueKey('fname'),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: fnameController,
-                focusNode: fnameFocusNode,
-                onChanged: (fname) {
-                  PreciseValidate.name(fname);
-                },
-                style: OwnTheme.bodyTextStyle()
-                    .copyWith(color: OwnTheme.darkTextColor),
-                cursorColor: Colors.black,
-                validator: (fname) => PreciseValidate.name(fname ?? ""),
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  "Full Name",
-                  null,
-                  context: context,
-                ),
-                onFieldSubmitted: (_) => nickNameFocusNode.requestFocus(),
-                textInputAction: TextInputAction.next),
+            child: GetBuilder<PreciseValidate>(builder: (PreciseValidate) {
+              return TextFormField(
+                  key: const ValueKey('fname'),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: fnameController,
+                  focusNode: fnameFocusNode,
+                  onChanged: (fname) {
+                    PreciseValidate.name(fname);
+                  },
+                  style: OwnTheme.bodyTextStyle()
+                      .copyWith(color: OwnTheme.darkTextColor),
+                  cursorColor: Colors.black,
+                  validator: (fname) => PreciseValidate.name(fname ?? ""),
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    "Full Name",
+                    null,
+                    context: context,
+                  ),
+                  onFieldSubmitted: (_) => nickNameFocusNode.requestFocus(),
+                  textInputAction: TextInputAction.next);
+            }),
           ),
           //nickname
           Padding(
             padding: const EdgeInsets.all(paddingAll),
-            child: TextFormField(
-                key: const ValueKey('nickname'),
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                controller: nickNameController,
-                focusNode: nickNameFocusNode,
-                cursorColor: OwnTheme.white,
-                onChanged: (nName) {
-                  PreciseValidate.nickName(nName);
-                },
-                style: OwnTheme.bodyTextStyle()
-                    .copyWith(color: OwnTheme.darkTextColor),
-                validator: (fname) => PreciseValidate.name(fname ?? ""),
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  "Nickname",
-                  null,
-                  context: context,
-                ),
-                onFieldSubmitted: (_) => nationalityFocusNode.requestFocus(),
-                textInputAction: TextInputAction.next),
+            child: GetBuilder<PreciseValidate>(
+              builder: (preciseValidate) {
+                return TextFormField(
+                  key: const ValueKey('nickname'),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  controller: nickNameController,
+                  focusNode: nickNameFocusNode,
+                  cursorColor: OwnTheme.white,
+                  onChanged: (nName) {
+                    preciseValidate.validateNickName(nName);
+                  },
+                  style: OwnTheme.bodyTextStyle()
+                      .copyWith(color: OwnTheme.darkTextColor),
+                  validator: (fname) =>
+                      preciseValidate.nickNameError.value.isNotEmpty
+                          ? preciseValidate.nickNameError.value
+                          : null,
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    "Nickname",
+                    null,
+                    context: context,
+                  ),
+                  onFieldSubmitted: (_) => nationalityFocusNode.requestFocus(),
+                  textInputAction: TextInputAction.next,
+                );
+              },
+            ),
           ),
 
           // Nationality
@@ -128,34 +145,40 @@ class _ProfileFormState extends State<ProfileForm> {
                 onSelect: (Country country) {
                   setState(() {
                     nationalityController.text = country.name;
+                    PreciseValidate().validateNationality(country.name);
                   });
                 },
               );
             },
-            child: AbsorbPointer(
-              child: Padding(
-                padding: const EdgeInsets.all(paddingAll),
-                child: SizedBox(
-                  width: 95.w,
-                  child: TextFormField(
-                    key: const ValueKey('nationality'),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    controller: nationalityController,
-                    focusNode: nationalityFocusNode,
-                    onChanged: (val) {
-                      PreciseValidate.field(val);
-                    },
-                    style:
-                        OwnTheme.bodyTextStyle().copyWith(color: Colors.black),
-                    validator: (nationality) =>
-                        PreciseValidate.nationality(nationality ?? ""),
-                    decoration: AuthScreensFieldDecoration.fieldDecoration(
-                      "Nationality",
-                      null,
-                      context: context,
-                    ),
-                    onFieldSubmitted: (_) => phoneFocusNode.requestFocus(),
-                  ),
+            child: Padding(
+              padding: const EdgeInsets.all(paddingAll),
+              child: SizedBox(
+                width: 95.w,
+                child: GetBuilder<PreciseValidate>(
+                  builder: (preciseValidate) {
+                    return TextFormField(
+                      key: const ValueKey('nationality'),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: nationalityController,
+                      focusNode: nationalityFocusNode,
+                      onChanged: (val) {
+                        // Clear the error message when the user starts typing
+                        preciseValidate.nationalityError.value = '';
+                      },
+                      style: OwnTheme.bodyTextStyle()
+                          .copyWith(color: Colors.black),
+                      validator: (nationality) =>
+                          preciseValidate.nationalityError.value.isNotEmpty
+                              ? preciseValidate.nationalityError.value
+                              : null,
+                      decoration: AuthScreensFieldDecoration.fieldDecoration(
+                        "Nationality",
+                        null,
+                        context: context,
+                      ),
+                      onFieldSubmitted: (_) => phoneFocusNode.requestFocus(),
+                    );
+                  },
                 ),
               ),
             ),
@@ -330,10 +353,7 @@ class _ProfileFormState extends State<ProfileForm> {
       );
       return;
     }
-    AuthBloc.get(context).add(UpdateProfileEvent(newUser));
-    // PlacesBloc.get(context).add(GetVenuesEvent([]));
-    // PlacesBloc.get(context).add(GetEventsAndActivitiesPlacesEvent([]));
-    // Navigation.emptyNavigator(HomeScreen.routeName, context, null);
+    Navigation.emptyNavigator(ProfileScreen.routeName, context, null);
   }
 
   // Function to show date picker

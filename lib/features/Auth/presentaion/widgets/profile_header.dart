@@ -6,7 +6,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sizer/sizer.dart';
-import 'package:zekrayaty_app/features/Auth/presentaion/bloc/auth_bloc.dart';
 import 'package:zekrayaty_app/theme.dart';
 
 class ProfileHeader extends StatefulWidget {
@@ -61,7 +60,7 @@ class _ProfileHeaderState extends State<ProfileHeader> {
   editPhoto(BuildContext context) async {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      AuthBloc.get(context).add(UpdateUserPhotoEvent(File(image.path)));
+      // AuthBloc.get(context).add(UpdateUserPhotoEvent(File(image.path)));
       setState(() {
         file = File(image.path);
       });

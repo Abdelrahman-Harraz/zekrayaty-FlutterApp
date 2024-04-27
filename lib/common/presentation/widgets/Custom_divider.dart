@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:zekrayaty_app/core/constants/constants.dart';
-import 'package:zekrayaty_app/core/main_blocs/blocs.dart';
 
 Widget CustomDivider() {
   return Container(
