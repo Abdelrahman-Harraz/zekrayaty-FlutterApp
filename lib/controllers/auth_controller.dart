@@ -1,42 +1,31 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zekrayaty_app/controllers/firebase_controller.dart';
 
 class AuthController extends GetxController {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  static AuthController get instance => Get.find();
 
-  Rx<User?> firebaseUser = Rx<User?>(null);
+  final email = TextEditingController();
+  final password = TextEditingController();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // Listen to authentication state changes
-    firebaseUser.bindStream(_auth.authStateChanges());
+  final emailFocusNode = FocusNode();
+  final passwordFocusNode = FocusNode();
+
+  bool passwordVisible = false;
+  bool isLogin = true;
+  bool rememberMe = false;
+
+  void toggleAuthMode() async {
+    isLogin = !isLogin;
+    update();
   }
 
-  // Method to sign in with email and password
-  Future<void> signIn(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-    } catch (e) {
-      print("Error signing in: $e");
-    }
+  void togglePasswordVisibility() {
+    passwordVisible = !passwordVisible;
+    update();
   }
 
-  Future<void> signUp(String email, String password) async {
-    try {
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-    } catch (e) {
-      print("Error signing up: $e");
-    }
-  }
-
-  // Method to sign out
-  Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      print("Error signing out: $e");
-    }
+  void registerUser(String email, String password) {
+    FirebaseController.instance.createUserWithEmailAndPassword(email, password);
   }
 }

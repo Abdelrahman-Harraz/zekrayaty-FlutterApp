@@ -1,28 +1,24 @@
-// Abstract class representing a generic failure entity with a message
-abstract class FailureEntity {
-  String message;
+import 'package:flutter/material.dart';
 
-  // Constructor with an optional default message
-  FailureEntity({
-    this.message = "",
-  });
-}
+class Failure {
+  final String message;
 
-// Concrete class representing a server-related failure
-class ServerFailure extends FailureEntity {}
+  const Failure([this.message = "An Unknown error occur"]);
 
-// Concrete class representing a failure related to data parsing
-class DataParsingFailure extends FailureEntity {}
-
-// Concrete class representing a failure due to no internet connection
-class NoConnectionFailure extends FailureEntity {}
-
-// Concrete class representing a failure due to invalid email or password
-class InvalidMailAndPassword extends FailureEntity {}
-
-// Concrete class representing a failure due to invalid data with a specific message
-class InvalidDataFailure extends FailureEntity {
-  InvalidDataFailure({
-    required String message,
-  }) : super(message: message);
+  factory Failure.code(String code) {
+    switch (code) {
+      case 'weak-password':
+        return Failure('please enter a stronger password');
+      case 'ivalid-email':
+        return Failure('email is not valid');
+      case 'email-already-used':
+        return Failure('email exist already');
+      case 'operation-not-allowed':
+        return Failure('please contact support');
+      case 'user-disabled':
+        return Failure('this user is disabled');
+      default:
+        return Failure();
+    }
+  }
 }
