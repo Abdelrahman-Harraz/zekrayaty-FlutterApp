@@ -28,4 +28,8 @@ class AuthController extends GetxController {
   void registerUser(String email, String password) {
     FirebaseController.instance.createUserWithEmailAndPassword(email, password);
   }
+
+  void signIn(String email, String password) {
+    FirebaseController.instance.loginUserWithEmailAndPassword(email, password);
+  }
 }

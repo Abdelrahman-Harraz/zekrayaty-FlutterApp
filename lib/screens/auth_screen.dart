@@ -127,7 +127,9 @@ class AuthScreen extends StatelessWidget {
                                       if (_formKey.currentState!.validate()) {
                                         if (controller.isLogin) {
                                           // Call the signIn method from AuthController
-                                          // controller.signIn();
+                                          AuthController.instance.signIn(
+                                              controller.email.text.trim(),
+                                              controller.password.text.trim());
                                         } else {
                                           AuthController.instance.registerUser(
                                               controller.email.text.trim(),

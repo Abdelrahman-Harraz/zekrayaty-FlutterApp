@@ -50,6 +50,9 @@ class FirebaseController extends GetxController {
       String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      FirebaseUser.value != null
+          ? Get.offAll(() => HomeScreen())
+          : Get.to(() => AuthScreen());
     } on FirebaseAuthException catch (e) {
     } catch (_) {}
   }
