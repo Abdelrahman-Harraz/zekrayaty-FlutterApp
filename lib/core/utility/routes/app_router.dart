@@ -1,6 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:zekrayaty_app/screens/auth_screen.dart';
-import 'package:zekrayaty_app/screens/dashboard.dart';
+import 'package:zekrayaty_app/screens/home_screen.dart';
 
 class AppRoutes {
   static String authentication = '/authentication';

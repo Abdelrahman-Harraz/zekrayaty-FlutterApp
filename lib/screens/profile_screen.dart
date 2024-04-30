@@ -1,24 +1,30 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
+import 'package:zekrayaty_app/common/presentation/widgets/Custom_divider.dart';
+import 'package:zekrayaty_app/controllers/firebase_controller.dart';
+import 'package:zekrayaty_app/core/constants/constants.dart';
+import 'package:zekrayaty_app/models/user_model.dart';
+import 'package:zekrayaty_app/widgets/profile_form.dart';
+
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
+  static String routeName = "/ProfileScreen";
+
+  ProfileScreen({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text("Profile"),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Text('Full Name: ${userProfile.fullName ?? 'N/A'}'),
-            // Text('Email: ${userProfile.email ?? 'N/A'}'),
-            // Add more fields as needed
+            ProfileForm(),
           ],
         ),
       ),
