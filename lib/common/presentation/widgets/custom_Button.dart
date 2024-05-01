@@ -3,13 +3,11 @@ import 'package:sizer/sizer.dart';
 import 'package:zekrayaty_app/core/constants/constants.dart';
 import 'package:zekrayaty_app/theme.dart';
 
-// CustomButton widget
 class CustomButton extends StatelessWidget {
   final String label;
   final Function()? onPressed;
   final Color? color;
 
-  // Constructor for the CustomButton widget
   CustomButton({
     Key? key,
     required this.label,

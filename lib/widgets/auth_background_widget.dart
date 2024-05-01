@@ -14,7 +14,7 @@ class AuthBackgroundWidget extends StatelessWidget {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 55),
+              padding: const EdgeInsets.symmetric(vertical: 80),
               child: Image.asset(
                 "assets/images/Logo1.png",
                 height: 30.h,

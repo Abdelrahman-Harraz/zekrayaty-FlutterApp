@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_social_button/flutter_social_button.dart';
@@ -94,12 +95,24 @@ class AuthScreen extends StatelessWidget {
                                     ),
                                     GestureDetector(
                                       onTap: controller.isGoogleLoading.value
-                                          ? () {}
+                                          ? null // Disable onTap when loading
                                           : () {
                                               controller.googleSignIn();
                                             },
-                                      child: Image.asset(
-                                          "assets/images/googleIcon.png"),
+                                      child: Stack(
+                                        children: [
+                                          Image.asset(
+                                              "assets/images/googleIcon.png"),
+                                          if (controller.isGoogleLoading.value)
+                                            Positioned.fill(
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(Colors.white),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -158,6 +171,15 @@ class AuthScreen extends StatelessWidget {
         onChanged: (email) {
           controller.email;
         },
+        validator: (email) {
+          if (email == null || email.isEmpty) {
+            return 'Please enter an email';
+          }
+          if (!EmailValidator.validate(email)) {
+            return 'Please enter a valid email';
+          }
+          return null;
+        },
         decoration: AuthScreensFieldDecoration.fieldDecoration(
           "Email",
           Icons.email,
@@ -182,7 +204,12 @@ class AuthScreen extends StatelessWidget {
         obscureText: !controller.passwordVisible,
         cursorColor: OwnTheme.white,
         validator: (password) {
-          // Add your password validation logic here
+          if (password == null || password.isEmpty) {
+            return 'Please enter a password';
+          }
+          if (password.length < 6) {
+            return 'Password must be at least 6 characters long';
+          }
           return null;
         },
         decoration: AuthScreensFieldDecoration.fieldDecoration(

@@ -1,14 +1,11 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import "package:flutter/material.dart";
 import 'package:sizer/sizer.dart';
 import 'package:zekrayaty_app/core/constants/constants.dart';
 import 'package:zekrayaty_app/theme.dart';
 
-// AuthScreensFieldDecoration class for defining field decorations
 class AuthScreensFieldDecoration {
   static const double betweenFieldsSpace = 10;
 
-// Method for creating field decoration
   static InputDecoration fieldDecoration(String label, IconData? iconData,
       {required BuildContext context,
       bool? passwordVisible,

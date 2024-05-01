@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 import 'package:zekrayaty_app/theme.dart';
 
 // Custom AppBar with customizable parameters

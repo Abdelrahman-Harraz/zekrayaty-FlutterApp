@@ -1,11 +1,10 @@
-import 'dart:ffi';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zekrayaty_app/controllers/firebase_controller.dart';
+import 'package:zekrayaty_app/controllers/profile_controller.dart';
+import 'package:zekrayaty_app/core/error_handling/failures.dart';
 import 'package:zekrayaty_app/screens/home_screen.dart';
-import 'package:zekrayaty_app/widgets/profile_form.dart';
+import 'package:zekrayaty_app/screens/profile_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController get instance => Get.find();
@@ -32,12 +31,23 @@ class AuthController extends GetxController {
     update();
   }
 
-  void registerUser(String email, String password) {
-    FirebaseController.instance.createUserWithEmailAndPassword(email, password);
+  void registerUser(String email, String password) async {
+    try {
+      await FirebaseController.instance
+          .createUserWithEmailAndPassword(email, password);
+    } on Failure catch (failure) {
+      // Handle failure here
+      Get.snackbar("Error", failure.message);
+    }
   }
 
   void signIn(String email, String password) {
-    FirebaseController.instance.loginUserWithEmailAndPassword(email, password);
+    try {
+      FirebaseController.instance
+          .loginUserWithEmailAndPassword(email, password);
+    } on Failure catch (failure) {
+      Get.snackbar("Error", failure.message);
+    }
   }
 
   Future<void> googleSignIn() async {
@@ -46,13 +56,32 @@ class AuthController extends GetxController {
       final auth = FirebaseController.instance;
       await auth.signInWithGoogle();
       isGoogleLoading.value = false;
-      auth.setInitialScreen(auth.FirebaseUserr);
-      FirebaseController.instance.FirebaseUserr != null
-          ? Get.offAll(HomeScreen())
-          : Get.offAll(ProfileForm());
+
+      if (auth.FirebaseUser.value != null) {
+        final email = auth.FirebaseUser.value!.email!;
+
+        bool profileExists = await checkProfileExists(email);
+        if (profileExists) {
+          Get.offAll(HomeScreen());
+        } else {
+          Get.offAll(CreatProfileScreen());
+          ProfileController.instance.clearTextFields();
+        }
+      } else {
+        Get.snackbar("Error", "User not authenticated");
+      }
     } catch (e) {
       isGoogleLoading.value = false;
-      Get.snackbar("Google Error", "Failed to login with google");
+      Get.snackbar("Google Error", "Failed to login with Google");
+    }
+  }
+
+  Future<bool> checkProfileExists(String email) async {
+    try {
+      final user = await FirebaseController.instance.getProfileDetails(email);
+      return user != null;
+    } catch (e) {
+      return false;
     }
   }
 }

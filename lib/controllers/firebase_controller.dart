@@ -21,7 +21,7 @@ class FirebaseController extends GetxController {
 
   late Rx<User?> FirebaseUser = Rx<User?>(null);
 
-  User? get FirebaseUserr => FirebaseUser.value;
+  // User? get FirebaseUserr => FirebaseUser.value;
 
   void onReady() {
     FirebaseUser = Rx<User?>(_auth.currentUser);
@@ -36,13 +36,16 @@ class FirebaseController extends GetxController {
         : Get.offAll(() => HomeScreen());
   }
 
+// ========================Email&password Auth==================================
   Future<void> createUserWithEmailAndPassword(
       String email, String password) async {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       FirebaseUser.value != null
-          ? Get.offAll(() => ProfileScreen())
+          ? Get.offAll(
+              () => CreatProfileScreen(),
+            )
           : Get.to(() => AuthScreen());
     } on FirebaseAuthException catch (e) {
       final ex = Failure.code(e.code);
@@ -54,6 +57,30 @@ class FirebaseController extends GetxController {
       throw ex;
     }
   }
+
+  Future<void> loginUserWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (_auth.currentUser != null) {
+        Get.offAll(HomeScreen());
+      } else {
+        Get.snackbar("Error", "User not found");
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.snackbar("Error", "User not found");
+      } else if (e.code == 'wrong-password') {
+        Get.snackbar("Error", "Invalid email or password");
+      } else {
+        Get.snackbar("Error", "Login failed: ${e.message}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Login failed: $e");
+    }
+  }
+
+// ==============================Google Auth====================================
 
   Future<UserCredential?> signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -69,17 +96,7 @@ class FirebaseController extends GetxController {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  Future<void> loginUserWithEmailAndPassword(
-      String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      FirebaseUser.value != null
-          ? Get.offAll(
-              () => HomeScreen()) //TODO change it because its for testing
-          : Get.to(() => AuthScreen());
-    } on FirebaseAuthException catch (e) {
-    } catch (_) {}
-  }
+// ==============================User profile===================================
 
   createProfile(UserModel user) async {
     await _db
@@ -94,16 +111,23 @@ class FirebaseController extends GetxController {
   }
 
   Future<UserModel> getProfileDetails(String email) async {
-    final snapshot = await _db
-        .collection("Users")
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
-    if (snapshot.docs.isNotEmpty) {
-      return UserModel.fromSnapshot(snapshot.docs.first);
-    } else {
-      throw Exception(
-          "User not found"); // Handle the case where no user is found
+    try {
+      final snapshot = await _db
+          .collection("Users")
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        return UserModel.fromSnapshot(snapshot.docs.first);
+      } else {
+        throw Exception("User not found");
+      }
+    } on FirebaseException catch (e) {
+      Get.snackbar("Error", "Firebase error occurred: ${e.message}");
+      rethrow;
+    } catch (e) {
+      Get.snackbar("Error", "An unexpected error occurred: $e");
+      rethrow;
     }
   }
 
@@ -121,16 +145,20 @@ class FirebaseController extends GetxController {
             .doc(documentID)
             .update(updatedUser.toJson());
         Get.snackbar("Success", "Profile updated successfully");
-        Get.to(() => HomeScreen());
+        Get.offAll(() => HomeScreen());
       } else {
         Get.snackbar("Error", "User profile not found");
       }
-    } catch (error) {
-      Get.snackbar("Error", "Failed to update profile");
-      print(error.toString());
+    } on FirebaseException catch (e) {
+      Get.snackbar("Error", "Firebase error occurred: ${e.message}");
+      rethrow;
+    } catch (e) {
+      Get.snackbar("Error", "An unexpected error occurred: $e");
+      rethrow;
     }
   }
 
+// ==============================Log out========================================
   Future<void> logOut() async {
     try {
       await GoogleSignIn().signOut();

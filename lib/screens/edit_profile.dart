@@ -1,11 +1,12 @@
-// ProfileScreen class with editing functionality
-
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+import 'package:zekrayaty_app/common/presentation/widgets/Custom_divider.dart';
 import 'package:zekrayaty_app/common/presentation/widgets/custom_Button.dart';
+import 'package:zekrayaty_app/common/presentation/widgets/custom_app_bar.dart';
 import 'package:zekrayaty_app/common/presentation/widgets/field_decoration.dart';
 import 'package:zekrayaty_app/controllers/profile_controller.dart';
+import 'package:zekrayaty_app/core/constants/constants.dart';
 import 'package:zekrayaty_app/models/user_model.dart';
 import 'package:zekrayaty_app/theme.dart';
 
@@ -23,15 +24,25 @@ class EditProfileScreen extends StatelessWidget {
     final phoneController = TextEditingController(text: user.phone);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Edit Profile"),
-      ),
+      appBar: CustomAppBar(txt: "Edit profile"),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(paddingAll),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(paddingAll),
+                child: Center(
+                  child: Text("Enter your new data",
+                      style: OwnTheme.subTitleStyle()
+                          .copyWith(color: OwnTheme.black)),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(paddingAll),
+                child: CustomDivider(),
+              ),
               SizedBox(
                 child: TextFormField(
                   controller: fullNameController,
@@ -42,7 +53,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 2.h),
               SizedBox(
                 child: TextFormField(
                   controller: nickNameController,
@@ -54,7 +65,7 @@ class EditProfileScreen extends StatelessWidget {
                   // Add space around the text
                 ),
               ),
-              SizedBox(height: 10.0), // Add space between fields
+              SizedBox(height: 2.h),
               GestureDetector(
                 onTap: () {
                   showCountryPicker(
@@ -81,7 +92,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 2.h),
               SizedBox(
                 child: TextFormField(
                   readOnly: true,
@@ -93,7 +104,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 2.h),
               SizedBox(
                 child: TextFormField(
                   controller: phoneController,
@@ -104,7 +115,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 2.h),
               CustomButton(
                 label: "Update",
                 onPressed: () {

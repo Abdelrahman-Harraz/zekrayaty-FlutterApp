@@ -1,20 +1,15 @@
-<<<<<<< HEAD
-# zekrayaty_app
+# Flutter Authentication App
 
-A new Flutter project.
+This Flutter app provides a simple authentication system allowing users to sign up, log in, and view their profile. Firebase Authentication is used for the backend authentication process.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Sign up with email and password
+- Log in with email and password
+- Google authentication
+- create, update user profile
+- Error handling for invalid credentials
+- View user profile with account details
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# zekrayaty-FlutterApp
->>>>>>> af65d10bfa8721301dd5d2ceb3419524cd48baae

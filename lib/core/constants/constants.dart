@@ -1,26 +1,3 @@
-//  ------------------------------- Enumerations -----------------------------
-
-enum InputType { signin, signup, forgetPassword, updateProfile }
-
-enum BasicFormType { signup, signin, phoneForm, codeForm, passwordForm }
-
-enum SharedPrefKey {
-  email,
-  apiToken,
-  phone,
-  password,
-  age,
-  state,
-  fname,
-  lname,
-}
-
-enum AppStatus { loggedIn, loggedOut, loading, profileNotFilled }
-
-enum RequestStatus { initial, loading, success, failure }
-
-enum SizeType { big, small }
-
 //  ------------------------------- Page Padding ------------------------------
 
 // Constants for borderRadius, paddingAll, side, side1, and homePadding
