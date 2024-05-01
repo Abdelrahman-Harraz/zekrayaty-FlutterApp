@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_social_button/flutter_social_button.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:zekrayaty_app/controllers/auth_controller.dart';
@@ -28,7 +29,7 @@ class AuthScreen extends StatelessWidget {
               child: Center(
                 child: SingleChildScrollView(
                   child: Container(
-                    height: 64.h,
+                    height: 55.h,
                     width: double.infinity,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -62,62 +63,6 @@ class AuthScreen extends StatelessWidget {
                                   child: _emailField(controller),
                                 ),
                                 _passwordField(controller),
-                                Row(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 7),
-                                          child: Checkbox(
-                                            checkColor: OwnTheme.black,
-                                            fillColor:
-                                                MaterialStateProperty.all(
-                                                    OwnTheme.white),
-                                            value: controller.rememberMe,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            onChanged: (bool? value) {
-                                              if (value != null) {
-                                                controller.rememberMe = value;
-                                                controller.update();
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                        Text(
-                                          "Remember me",
-                                          style:
-                                              OwnTheme.bodyTextStyle().copyWith(
-                                            color: OwnTheme.LightBlack,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 8.w,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.all(1),
-                                      child: TextButton(
-                                        onPressed: () {
-                                          // Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
-                                        },
-                                        child: Text(
-                                          controller.isLogin
-                                              ? "Forgot password ?"
-                                              : "",
-                                          style: OwnTheme.bodyTextStyle()
-                                              .copyWith(
-                                                  color: OwnTheme
-                                                      .callToActionColor),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
                                 Center(
                                   child: CustomButton(
                                     label: controller.isLogin
@@ -126,7 +71,6 @@ class AuthScreen extends StatelessWidget {
                                     onPressed: () {
                                       if (_formKey.currentState!.validate()) {
                                         if (controller.isLogin) {
-                                          // Call the signIn method from AuthController
                                           AuthController.instance.signIn(
                                               controller.email.text.trim(),
                                               controller.password.text.trim());
@@ -148,21 +92,14 @@ class AuthScreen extends StatelessWidget {
                                       style: OwnTheme.bodyTextStyle()
                                           .copyWith(color: OwnTheme.LightBlack),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Image.asset(
-                                              "assets/images/googleIcon.png"),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Image.asset(
-                                              "assets/images/facebookIcon.png"),
-                                        ),
-                                      ],
+                                    GestureDetector(
+                                      onTap: controller.isGoogleLoading.value
+                                          ? () {}
+                                          : () {
+                                              controller.googleSignIn();
+                                            },
+                                      child: Image.asset(
+                                          "assets/images/googleIcon.png"),
                                     ),
                                     Row(
                                       mainAxisAlignment:

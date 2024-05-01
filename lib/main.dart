@@ -7,6 +7,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:sizer/sizer.dart';
 
 import 'package:zekrayaty_app/controllers/firebase_controller.dart';
+import 'package:zekrayaty_app/controllers/profile_controller.dart';
 
 import 'package:zekrayaty_app/core/utility/routes/app_router.dart';
 
@@ -18,6 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
       .then((value) => Get.put(FirebaseController()));
+  Get.put(ProfileController());
 
   runApp(MyApp());
 }

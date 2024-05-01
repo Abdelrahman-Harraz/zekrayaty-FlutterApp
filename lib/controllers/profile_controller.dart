@@ -66,9 +66,10 @@ class ProfileController extends GetxController {
   void updateProfile(UserModel updatedUser) async {
     try {
       await firebaseController.updateProfile(updatedUser);
+
       // Optionally, you can reload the user data after updating
       // This assumes you have a method to refresh the user data
-      // getUserData();
+      getUserData();
     } catch (error) {
       // Handle any errors
       print(error.toString());

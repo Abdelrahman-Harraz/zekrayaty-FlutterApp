@@ -28,96 +28,98 @@ class EditProfileScreen extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              child: TextFormField(
-                controller: fullNameController,
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  'Full Name',
-                  null,
-                  context: context,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                child: TextFormField(
+                  controller: fullNameController,
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    'Full Name',
+                    null,
+                    context: context,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10.0),
-            SizedBox(
-              child: TextFormField(
-                controller: nickNameController,
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  'Nick Name',
-                  null,
-                  context: context,
+              SizedBox(height: 10.0),
+              SizedBox(
+                child: TextFormField(
+                  controller: nickNameController,
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    'Nick Name',
+                    null,
+                    context: context,
+                  ),
+                  // Add space around the text
                 ),
-                // Add space around the text
               ),
-            ),
-            SizedBox(height: 10.0), // Add space between fields
-            GestureDetector(
-              onTap: () {
-                showCountryPicker(
-                  context: context,
-                  showPhoneCode: false,
-                  onSelect: (Country country) {
-                    nationalityController.text = country.name;
-                  },
-                );
-              },
-              child: AbsorbPointer(
-                child: SizedBox(
-                  child: TextFormField(
-                    controller: nationalityController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    style:
-                        OwnTheme.bodyTextStyle().copyWith(color: Colors.black),
-                    decoration: AuthScreensFieldDecoration.fieldDecoration(
-                      'Nationality',
-                      null,
-                      context: context,
+              SizedBox(height: 10.0), // Add space between fields
+              GestureDetector(
+                onTap: () {
+                  showCountryPicker(
+                    context: context,
+                    showPhoneCode: false,
+                    onSelect: (Country country) {
+                      nationalityController.text = country.name;
+                    },
+                  );
+                },
+                child: AbsorbPointer(
+                  child: SizedBox(
+                    child: TextFormField(
+                      controller: nationalityController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      style: OwnTheme.bodyTextStyle()
+                          .copyWith(color: Colors.black),
+                      decoration: AuthScreensFieldDecoration.fieldDecoration(
+                        'Nationality',
+                        null,
+                        context: context,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 10.0),
-            SizedBox(
-              child: TextFormField(
-                readOnly: true,
-                controller: emailController,
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  'Email',
-                  null,
-                  context: context,
+              SizedBox(height: 10.0),
+              SizedBox(
+                child: TextFormField(
+                  readOnly: true,
+                  controller: emailController,
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    'Email',
+                    null,
+                    context: context,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 10.0),
-            SizedBox(
-              child: TextFormField(
-                controller: phoneController,
-                decoration: AuthScreensFieldDecoration.fieldDecoration(
-                  'Phone',
-                  null,
-                  context: context,
+              SizedBox(height: 10.0),
+              SizedBox(
+                child: TextFormField(
+                  controller: phoneController,
+                  decoration: AuthScreensFieldDecoration.fieldDecoration(
+                    'Phone',
+                    null,
+                    context: context,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            CustomButton(
-              label: "Update",
-              onPressed: () {
-                final updatedUser = UserModel(
-                  email: user.email,
-                  fullName: fullNameController.text,
-                  nickName: nickNameController.text,
-                  nationality: nationalityController.text,
-                  phone: phoneController.text,
-                );
-                ProfileController.instance.updateProfile(updatedUser);
-              },
-            ),
-          ],
+              SizedBox(height: 16),
+              CustomButton(
+                label: "Update",
+                onPressed: () {
+                  final updatedUser = UserModel(
+                    email: user.email,
+                    fullName: fullNameController.text,
+                    nickName: nickNameController.text,
+                    nationality: nationalityController.text,
+                    phone: phoneController.text,
+                  );
+                  ProfileController.instance.updateProfile(updatedUser);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

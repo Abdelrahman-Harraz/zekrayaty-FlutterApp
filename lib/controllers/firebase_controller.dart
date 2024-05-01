@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zekrayaty_app/core/error_handling/failures.dart';
 import 'package:zekrayaty_app/models/user_model.dart';
 import 'package:zekrayaty_app/screens/auth_screen.dart';
@@ -16,15 +19,18 @@ class FirebaseController extends GetxController {
   final _db = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
 
-  late final Rx<User?> FirebaseUser;
+  late Rx<User?> FirebaseUser = Rx<User?>(null);
+
+  User? get FirebaseUserr => FirebaseUser.value;
 
   void onReady() {
     FirebaseUser = Rx<User?>(_auth.currentUser);
     FirebaseUser.bindStream(_auth.userChanges());
-    ever(FirebaseUser, (callback) => _setInitialScreen);
+    FlutterNativeSplash.remove();
+    ever(FirebaseUser, (callback) => setInitialScreen);
   }
 
-  _setInitialScreen(User? user) {
+  setInitialScreen(User? user) {
     user == null
         ? Get.offAll(() => AuthScreen())
         : Get.offAll(() => HomeScreen());
@@ -47,6 +53,20 @@ class FirebaseController extends GetxController {
       print('EXCEPTION ${ex.message}');
       throw ex;
     }
+  }
+
+  Future<UserCredential?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   Future<void> loginUserWithEmailAndPassword(
@@ -112,7 +132,12 @@ class FirebaseController extends GetxController {
   }
 
   Future<void> logOut() async {
-    await _auth.signOut();
-    Get.offAll(AuthScreen());
+    try {
+      await GoogleSignIn().signOut();
+      await _auth.signOut();
+      Get.offAll(AuthScreen());
+    } catch (e) {
+      throw 'Unable to logout';
+    }
   }
 }
